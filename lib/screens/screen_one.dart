@@ -12,14 +12,36 @@ class ScreenOne extends StatefulWidget {
 }
 
 class _ScreenOneState extends State<ScreenOne> {
-  File? image;
+  File? imageOne;
+  File? imageTwo;
+  File? imageThree;
 
-  Future pickImage(ImageSource source) async {
+  Future pickImageOne(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
       final imageTemporary = File(image.path);
-      setState(() => this.image = imageTemporary);
+      setState(() => this.imageOne = imageTemporary);
+    } on PlatformException catch (e) {
+      print('Разрешение не получено : $e');
+    }
+  }
+  Future pickImageTwo(ImageSource source) async {
+    try {
+      final imageTwo = await ImagePicker().pickImage(source: source);
+      if (imageTwo == null) return;
+      final imageTemporary = File(imageTwo.path);
+      setState(() => this.imageTwo = imageTemporary);
+    } on PlatformException catch (e) {
+      print('Разрешение не получено : $e');
+    }
+  }
+  Future pickImageThree(ImageSource source) async {
+    try {
+      final imageThree = await ImagePicker().pickImage(source: source);
+      if (imageThree == null) return;
+      final imageTemporary = File(imageThree.path);
+      setState(() => this.imageThree = imageTemporary);
     } on PlatformException catch (e) {
       print('Разрешение не получено : $e');
     }
@@ -139,8 +161,8 @@ class _ScreenOneState extends State<ScreenOne> {
                         height: 100,
                         width: 80,
                         child: Center(
-                          child: image != null
-                              ? Image.file(image!, fit: BoxFit.cover)
+                          child: imageOne != null
+                              ? Image.file(imageOne!, fit: BoxFit.cover)
                               : const Text('JPG'),
                         ),
                       ),
@@ -152,13 +174,17 @@ class _ScreenOneState extends State<ScreenOne> {
                       onTap: () {
                         showModalBottomSheet(
                             context: context,
-                            builder: (builder) => bottomSheet());
+                            builder: (builder) => bottomSheetTwo());
                       },
                       child: Container(
                         color: const Color(0xff797979),
                         height: 100,
                         width: 80,
-                        child: const Center(child: Text('JPG')),
+                        child: Center(
+                          child: imageTwo != null
+                              ? Image.file(imageTwo!, fit: BoxFit.cover)
+                              : const Text('JPG'),
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -168,13 +194,17 @@ class _ScreenOneState extends State<ScreenOne> {
                       onTap: () {
                         showModalBottomSheet(
                             context: context,
-                            builder: (builder) => bottomSheet());
+                            builder: (builder) => bottomSheetThree());
                       },
                       child: Container(
                         color: const Color(0xff797979),
                         height: 100,
                         width: 80,
-                        child: const Center(child: Text('JPG')),
+                        child: Center(
+                          child: imageThree != null
+                              ? Image.file(imageThree!, fit: BoxFit.cover)
+                              : const Text('JPG'),
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -186,7 +216,7 @@ class _ScreenOneState extends State<ScreenOne> {
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(shape: StadiumBorder()),
+                    style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
                     onPressed: () {},
                   child: const Text('Перейти в чат'),),
                 ),
@@ -217,14 +247,89 @@ class _ScreenOneState extends State<ScreenOne> {
             children: [
               TextButton.icon(
                 onPressed: () {
-                  pickImage(ImageSource.camera);
+                  pickImageOne(ImageSource.camera);
                 },
                 icon: const Icon(Icons.camera_alt),
                 label: const Text('Camera'),
               ),
               TextButton.icon(
                 onPressed: () {
-                  pickImage(ImageSource.gallery);
+                  pickImageOne(ImageSource.gallery);
+                },
+                icon: const Icon(Icons.image),
+                label: const Text('Gallery'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget bottomSheetTwo() {
+    return Container(
+      height: 100,
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          const Text(
+            'Выберите фото',
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextButton.icon(
+                onPressed: () {
+                  pickImageTwo(ImageSource.camera);
+                },
+                icon: const Icon(Icons.camera_alt),
+                label: const Text('Camera'),
+              ),
+              TextButton.icon(
+                onPressed: () {
+                  pickImageTwo(ImageSource.gallery);
+                },
+                icon: const Icon(Icons.image),
+                label: const Text('Gallery'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget bottomSheetThree() {
+    return Container(
+      height: 100,
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          const Text(
+            'Выберите фото',
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextButton.icon(
+                onPressed: () {
+                  pickImageThree(ImageSource.camera);
+                },
+                icon: const Icon(Icons.camera_alt),
+                label: const Text('Camera'),
+              ),
+              TextButton.icon(
+                onPressed: () {
+                  pickImageThree(ImageSource.gallery);
                 },
                 icon: const Icon(Icons.image),
                 label: const Text('Gallery'),
